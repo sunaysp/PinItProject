@@ -1,0 +1,316 @@
+/*
+SQLyog Community v9.63 
+MySQL - 5.6.12-log : Database - pinit
+*********************************************************************
+*/
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`pinit` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `pinit`;
+
+/*Table structure for table `activity` */
+
+DROP TABLE IF EXISTS `activity`;
+
+CREATE TABLE `activity` (
+  `activity_id` bigint(20) NOT NULL,
+  `name` varchar(20) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`activity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `activity` */
+
+insert  into `activity`(`activity_id`,`name`,`user_id`,`created_date`) values (0,'Friend sent',13,'2013-12-12 14:19:00');
+
+/*Table structure for table `board` */
+
+DROP TABLE IF EXISTS `board`;
+
+CREATE TABLE `board` (
+  `board_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(35) CHARACTER SET latin1 NOT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `category_id` int(11) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `description` varchar(100) DEFAULT NULL,
+  `visibility` varchar(10) NOT NULL DEFAULT 'Public',
+  PRIMARY KEY (`board_id`),
+  KEY `board_owner` (`user_id`),
+  KEY `board_category` (`category_id`),
+  CONSTRAINT `board_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`),
+  CONSTRAINT `board_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+
+/*Data for the table `board` */
+
+insert  into `board`(`board_id`,`name`,`user_id`,`category_id`,`created_date`,`modified_date`,`description`,`visibility`) values (10,'Cars',12,15,'2013-12-12 13:49:56','2013-12-12 13:49:56','My cars','public'),(11,'Pets',12,4,'2013-12-12 13:54:09','2013-12-12 13:54:09','my pets','public'),(12,'safari',13,4,'2013-12-12 14:13:25','2013-12-12 14:13:25','','public'),(13,'Pets',14,4,'2013-12-12 15:48:23','2013-12-12 15:48:23','','public');
+
+/*Table structure for table `category` */
+
+DROP TABLE IF EXISTS `category`;
+
+CREATE TABLE `category` (
+  `category_id` int(5) NOT NULL AUTO_INCREMENT,
+  `category` varchar(35) CHARACTER SET latin1 NOT NULL,
+  PRIMARY KEY (`category_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+
+/*Data for the table `category` */
+
+insert  into `category`(`category_id`,`category`) values (1,'Food'),(2,'Travel'),(3,'Music'),(4,'Animals'),(5,'Architecture'),(6,'Art'),(7,'Design'),(8,'Celebrities'),(9,'Film, Music &amp; Books '),(10,'Food &amp; Drink'),(11,'For Dad'),(12,'Geek'),(13,'Gardening'),(14,'Health &amp; Fitness'),(15,'Sports'),(16,'Technology'),(17,'Weddings'),(18,'Women\'s Fashion'),(19,'Men\'s Fashion');
+
+/*Table structure for table `comment` */
+
+DROP TABLE IF EXISTS `comment`;
+
+CREATE TABLE `comment` (
+  `comment_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `pin_id` bigint(20) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `comment` tinytext CHARACTER SET latin1,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`comment_id`),
+  KEY `comment_pin_id` (`pin_id`),
+  KEY `comment_user_id` (`user_id`),
+  KEY `comment_PinID` (`pin_id`),
+  CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`pin_id`) REFERENCES `pin` (`pin_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+
+/*Data for the table `comment` */
+
+/*Table structure for table `follows` */
+
+DROP TABLE IF EXISTS `follows`;
+
+CREATE TABLE `follows` (
+  `user_id` bigint(20) NOT NULL,
+  `board_id` bigint(20) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`,`board_id`),
+  KEY `follows_board` (`board_id`),
+  CONSTRAINT `follows_boardId` FOREIGN KEY (`board_id`) REFERENCES `board` (`board_id`) ON DELETE CASCADE,
+  CONSTRAINT `follows_userId` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `follows` */
+
+insert  into `follows`(`user_id`,`board_id`,`created_date`,`modified_date`) values (12,12,'2013-12-12 16:22:50','2013-12-12 16:22:50');
+
+/*Table structure for table `followstream` */
+
+DROP TABLE IF EXISTS `followstream`;
+
+CREATE TABLE `followstream` (
+  `stream_id` int(10) NOT NULL AUTO_INCREMENT,
+  `board_id` bigint(20) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`stream_id`,`board_id`),
+  KEY `follow_board_id` (`board_id`),
+  CONSTRAINT `followstream_ibfk_1` FOREIGN KEY (`stream_id`) REFERENCES `stream` (`stream_id`),
+  CONSTRAINT `followstream_ibfk_2` FOREIGN KEY (`board_id`) REFERENCES `board` (`board_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+/*Data for the table `followstream` */
+
+insert  into `followstream`(`stream_id`,`board_id`,`create_date`,`modified_date`) values (6,10,'2013-12-12 14:53:24','2013-12-12 14:53:24'),(7,12,'2013-12-12 15:54:13','2013-12-12 15:54:13');
+
+/*Table structure for table `friends` */
+
+DROP TABLE IF EXISTS `friends`;
+
+CREATE TABLE `friends` (
+  `user_id` bigint(20) NOT NULL,
+  `friend_id` bigint(20) NOT NULL,
+  `status` varchar(15) CHARACTER SET latin1 NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`,`friend_id`),
+  KEY `friend_friend` (`friend_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `friends` */
+
+insert  into `friends`(`user_id`,`friend_id`,`status`,`created_date`,`modified_date`) values (12,13,'ACCEPTED','2013-12-12 14:19:16','2013-12-12 14:19:16'),(12,14,'ACCEPTED','2013-12-12 15:52:55','2013-12-12 15:52:55'),(13,12,'ACCEPTED','2013-12-12 14:19:16','2013-12-12 14:19:00'),(14,12,'ACCEPTED','2013-12-12 15:52:55','2013-12-12 15:52:39');
+
+/*Table structure for table `likes` */
+
+DROP TABLE IF EXISTS `likes`;
+
+CREATE TABLE `likes` (
+  `pic_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`pic_id`,`user_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `likes` */
+
+insert  into `likes`(`pic_id`,`user_id`,`created_date`) values (130,13,'2013-12-12 14:25:59'),(134,13,'2013-12-12 14:12:10'),(137,13,'2013-12-12 14:11:53'),(143,14,'2013-12-12 15:50:46');
+
+/*Table structure for table `picture` */
+
+DROP TABLE IF EXISTS `picture`;
+
+CREATE TABLE `picture` (
+  `pic_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `url` varchar(500) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `source` varchar(500) DEFAULT '(NULL)',
+  PRIMARY KEY (`pic_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=utf8;
+
+/*Data for the table `picture` */
+
+insert  into `picture`(`pic_id`,`url`,`created_date`,`modified_date`,`source`) values (129,'13868742871).jpg','2013-12-12 13:51:27','2013-12-12 13:51:27','(NULL)'),(130,'1386874361.jpg','2013-12-12 13:52:41','2013-12-12 13:52:41','(NULL)'),(134,'Loin Shaved Cat.jpeg','2013-12-12 13:57:11','2013-12-12 13:57:11','http://oddanimals.com/loin-shaved-cat/'),(137,'Bilby.jpeg','2013-12-12 14:08:09','2013-12-12 14:08:09','http://oddanimals.com/bilby/'),(138,'1386876211.jpg','2013-12-12 14:23:31','2013-12-12 14:23:31','(NULL)'),(139,'1386876239.jpg','2013-12-12 14:23:59','2013-12-12 14:23:59','(NULL)'),(140,'1386876261.jpg','2013-12-12 14:24:21','2013-12-12 14:24:21','(NULL)'),(141,'1386876327.jpg','2013-12-12 14:25:27','2013-12-12 14:25:27','(NULL)'),(142,'138688132613_015939.png','2013-12-12 15:48:46','2013-12-12 15:48:46','(NULL)'),(143,'1386881345.jpg','2013-12-12 15:49:05','2013-12-12 15:49:05','(NULL)'),(144,'Cat Hold Up.jpeg','2013-12-12 16:22:08','2013-12-12 16:22:08','http://oddanimals.com/dont-shoot/');
+
+/*Table structure for table `pin` */
+
+DROP TABLE IF EXISTS `pin`;
+
+CREATE TABLE `pin` (
+  `pin_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `board_id` bigint(20) NOT NULL,
+  `pic_id` bigint(20) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `parent_id` bigint(20) DEFAULT '0',
+  `description` text,
+  PRIMARY KEY (`pin_id`),
+  KEY `pin_pic` (`pic_id`),
+  KEY `pin_board` (`board_id`),
+  CONSTRAINT `pin_ibfk_1` FOREIGN KEY (`pic_id`) REFERENCES `picture` (`pic_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+
+/*Data for the table `pin` */
+
+insert  into `pin`(`pin_id`,`board_id`,`pic_id`,`created_date`,`modified_date`,`parent_id`,`description`) values (72,10,129,'2013-12-12 13:51:50','2013-12-12 13:51:50',0,'my ride'),(73,10,130,'2013-12-12 13:53:00','2013-12-12 13:53:00',0,'black beauty'),(77,11,134,'2013-12-12 13:57:11','2013-12-12 13:57:11',0,'Loin Shaved Cat'),(80,11,137,'2013-12-12 14:08:09','2013-12-12 14:08:09',0,'Bilby'),(81,12,138,'2013-12-12 14:23:43','2013-12-12 14:23:43',0,'elephant'),(82,12,139,'2013-12-12 14:24:08','2013-12-12 14:24:08',0,'zebra'),(83,12,140,'2013-12-12 14:24:28','2013-12-12 14:24:28',0,'little cubs'),(84,12,141,'2013-12-12 14:25:33','2013-12-12 14:25:33',0,'bison'),(87,13,143,'2013-12-12 15:49:20','2013-12-12 15:49:20',0,'bear'),(89,11,144,'2013-12-12 16:22:08','2013-12-12 16:22:08',0,'Cat Hold Up');
+
+/*Table structure for table `stream` */
+
+DROP TABLE IF EXISTS `stream`;
+
+CREATE TABLE `stream` (
+  `stream_id` int(10) NOT NULL AUTO_INCREMENT,
+  `stream_name` varchar(50) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`stream_id`),
+  KEY `stream_user_id` (`user_id`),
+  CONSTRAINT `stream_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+
+/*Data for the table `stream` */
+
+insert  into `stream`(`stream_id`,`stream_name`,`user_id`,`create_date`,`modified_date`) values (6,'Automobiles',13,'2013-12-12 14:53:24','2013-12-12 14:53:24'),(7,'stream1',12,'2013-12-12 15:54:13','2013-12-12 15:54:13');
+
+/*Table structure for table `tagpin` */
+
+DROP TABLE IF EXISTS `tagpin`;
+
+CREATE TABLE `tagpin` (
+  `tag_id` bigint(20) NOT NULL,
+  `pin_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`tag_id`,`pin_id`),
+  KEY `tagpin_pin_id` (`pin_id`),
+  CONSTRAINT `tag_pin` FOREIGN KEY (`pin_id`) REFERENCES `pin` (`pin_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `tagpin` */
+
+insert  into `tagpin`(`tag_id`,`pin_id`) values (24,72),(25,72),(26,72),(26,73),(27,73),(28,77),(29,77),(30,77),(32,77),(28,80),(29,80),(30,80),(28,81),(30,81),(28,82),(28,83),(28,84),(29,87),(30,87),(33,89),(34,89);
+
+/*Table structure for table `tags` */
+
+DROP TABLE IF EXISTS `tags`;
+
+CREATE TABLE `tags` (
+  `tag_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tag_name` varchar(20) NOT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`tag_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+
+/*Data for the table `tags` */
+
+insert  into `tags`(`tag_id`,`tag_name`,`created_date`) values (24,'orange','2013-12-12 13:51:51'),(25,'car','2013-12-12 13:51:51'),(26,'wheels','2013-12-12 13:51:51'),(27,'black','2013-12-12 13:53:00'),(28,'animals','2013-12-12 13:54:43'),(29,'pets','2013-12-12 13:54:43'),(30,'cute','2013-12-12 13:54:43'),(31,'ctas','2013-12-12 13:56:34'),(32,'cats','2013-12-12 13:57:13'),(33,'Cat','2013-12-12 16:22:09'),(34,'animal','2013-12-12 16:22:09');
+
+/*Table structure for table `tagstream` */
+
+DROP TABLE IF EXISTS `tagstream`;
+
+CREATE TABLE `tagstream` (
+  `tag_id` bigint(20) NOT NULL,
+  `stream_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`tag_id`,`stream_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `tagstream` */
+
+/*Table structure for table `user` */
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `user_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(35) CHARACTER SET latin1 NOT NULL,
+  `password` varchar(200) CHARACTER SET latin1 NOT NULL,
+  `firstname` varchar(35) CHARACTER SET latin1 NOT NULL,
+  `lastname` varchar(30) CHARACTER SET latin1 DEFAULT NULL,
+  `email` varchar(25) DEFAULT NULL,
+  `location` varchar(30) CHARACTER SET latin1 DEFAULT NULL,
+  `profile_pic` varchar(200) DEFAULT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `isactive` tinyint(1) NOT NULL DEFAULT '1',
+  `salt` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+
+/*Data for the table `user` */
+
+insert  into `user`(`user_id`,`username`,`password`,`firstname`,`lastname`,`email`,`location`,`profile_pic`,`created_date`,`modified_date`,`isactive`,`salt`) values (12,'batman','84b82997a3c6b72bca4b0460079ec56057662bfb45e139360bc095f42cb319e8','Bruce','Wayne','darkknight@gmail.com','','batman.jpg','2013-12-12 13:45:54','2013-12-12 13:42:55',1,'291'),(13,'superman','b3191cf1709381c0ebd995736a825ad2a20a5123a74bb9cc5089615168a7ba52','superman','s','superman@gmail.com','','superman.jpg','2013-12-12 14:11:18','2013-12-12 14:10:57',1,'31f'),(14,'lucy','0d44c2de4b237e547a2c02c4ee8bff9affa9c8ae42210ec690e5af77362599c8','lucy','lu','lucy@gmail.com','New york','lucy.jpg','2013-12-12 15:47:06','2013-12-12 15:46:26',1,'c73');
+
+/*Table structure for table `friendsview` */
+
+DROP TABLE IF EXISTS `friendsview`;
+
+/*!50001 DROP VIEW IF EXISTS `friendsview` */;
+/*!50001 DROP TABLE IF EXISTS `friendsview` */;
+
+/*!50001 CREATE TABLE  `friendsview`(
+ `user_id` bigint(20) ,
+ `friend_id` bigint(20) ,
+ `status` varchar(15) ,
+ `created_date` timestamp ,
+ `modified_date` timestamp 
+)*/;
+
+/*View structure for view friendsview */
+
+/*!50001 DROP TABLE IF EXISTS `friendsview` */;
+/*!50001 DROP VIEW IF EXISTS `friendsview` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `friendsview` AS select `f1`.`user_id` AS `user_id`,`f1`.`friend_id` AS `friend_id`,`f1`.`status` AS `status`,`f1`.`created_date` AS `created_date`,`f1`.`modified_date` AS `modified_date` from (`friends` `f1` join `friends` `f2` on(((`f1`.`user_id` = `f2`.`friend_id`) and (`f1`.`friend_id` = `f2`.`user_id`)))) */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
