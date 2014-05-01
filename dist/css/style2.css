@@ -1,0 +1,262 @@
+/**** Base styles ****/
+
+html, body{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+
+body { 
+  font: 13px 'Helvetica Neue', Arial, sans-serif;
+  background:url(bg.gif) 0 0 repeat #f7f5f5;
+  color: #222222;
+  line-height: 1.4em;
+}
+
+h1
+{
+font-size:32px;
+}
+
+a {
+  color: #555555;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #D26;
+  text-decoration:underline;
+}
+
+
+/**** #site-nav ****/
+
+
+
+/**** Content ****/
+
+#update
+{
+margin:0 auto;
+width:550px;
+margin-bottom:10px;
+padding:20px;
+border:solid 1px #555555;
+-moz-border-radius: 8px;-webkit-border-radius: 8px;border-radius: 8px;
+background:#ADD8E6;
+}
+
+.textbox
+{
+border:solid 1px #aaaaaa;
+width:400px;
+height:25px;
+font-family:Arial, Helvetica, sans-serif;
+font-size:13px;
+overflow: auto;
+resize: none;
+padding:3px;
+-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;
+float:left;
+}
+
+#button_area
+{
+margin-left:415px;
+}
+
+#upload_area
+{
+margin-top:10px;
+}
+
+.pin_button
+{
+cursor:pointer;
+padding:5px;
+color:#000000;
+font-weight:bold;
+background-color: #D3D3D3;
+border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;
+}
+
+
+.pin_holder
+{
+padding-left:10px;
+padding-right:10px;
+}
+
+.pin_image
+{
+width:178px;
+}
+
+.data
+{
+margin-top:10px;
+margin-bottom:10px;
+}
+
+
+.comment_area
+{
+border-top:solid 1px #cccccc;
+padding:10px;
+background:#eeeeee;
+width:178px;
+overflow:auto;
+}
+
+.commentbox_area
+{
+padding:10px;
+background:#eeeeee;
+border-top:solid 1px #bbbbbb;
+}
+
+.comment_user
+{
+float:left;
+width:40px;
+}
+
+.commentbody
+{
+margin-left:40px;
+word-wrap:break-word;
+overflow:hidden;
+}
+
+.comment
+{
+font-size:11px;
+font-family:Arial,sans-sarif;
+overflow: auto;
+resize: none;
+width:175px;
+}
+
+.comment_button
+{
+cursor:pointer;
+padding:2px;
+color:#000000;
+font-size:11px;
+border:solid 1px;
+background-color: #fbfbfb;
+border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;
+}
+
+.preview
+{
+max-width:200px;
+max-height:200px;
+border:solid 1px #dedede;
+padding:5px;
+}
+#preview
+{
+color:#cc0000;
+font-size:12px
+}
+
+
+/*basic structure*/
+
+#content {
+width:1050px;
+margin:0 auto;
+}
+
+
+#title
+{
+text-align:center;
+padding-bottom:20px;
+margin-bottom:20px;
+border-bottom:solid 2px #000000;
+}
+
+.morebox
+{
+padding:10px;
+font-weight:bold;
+border:solid 1px #dddddd;
+background:#eeeeee;
+}
+
+#footer
+{
+border-top:solid 2px #000000;
+padding-top:20px;
+margin-bottom:40px;
+color:#aaaaaa;
+font-weight:solid;
+}
+
+
+/*Masonry Grid CSS*/
+
+ul, ol { padding-left: 1.3em;}
+
+.hidden { display: none; }
+
+
+
+#container {
+  background:url(bg.gif) 0 0 repeat #f7f5f5;
+  margin-bottom: 20px;
+  clear: both;
+
+}
+
+.centered { margin: 0 auto; }
+
+.box {
+  margin: 5px;
+  background: #d5e4f7;
+  border:solid 1px #cccccc;
+  font-size: 11px;
+  line-height: 1.4em;
+  float: left;
+}
+
+.box h2 {
+  font-size: 14px;
+  font-weight: 200;
+}
+
+/*Vary the width of box by changing col index number */
+
+.col2 { width: 198px; height: 295px;}
+
+.col2 img { max-width: 198px; max-height: 230px;}
+
+
+
+/* CSS value */
+code .nd { color: #9FAD7E; } /* CSS pseudo selector */
+
+/**** Clearfix ****/
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+.tbox {position:absolute; display:none; padding:14px 17px; z-index:900}
+.tinner {padding:15px; -moz-border-radius:5px; border-radius:5px; background:#fff url(images/preload.gif) no-repeat 50% 50%; border-right:1px solid #333; border-bottom:1px solid #333}
+.tmask {position:absolute; display:none; top:0px; left:0px; height:100%; width:100%; background:#000; z-index:800}
+.tclose {position:absolute; top:0px; right:0px; width:30px; height:30px; cursor:pointer; background:url(images/close.png) no-repeat}
+.tclose:hover {background-position:0 -30px}
+
+#error {background:#ff6969; color:#fff; text-shadow:1px 1px #cf5454; border-right:1px solid #000; border-bottom:1px solid #000; padding:0}
+#error .tcontent {padding:10px 14px 11px; border:1px solid #ffb8b8; -moz-border-radius:5px; border-radius:5px}
+#success {background:#2ea125; color:#fff; text-shadow:1px 1px #1b6116; border-right:1px solid #000; border-bottom:1px solid #000; padding:10; -moz-border-radius:0; border-radius:0}
+#bluemask {background:#4195aa}
+#frameless {padding:0}
+#frameless .tclose {left:6px}
